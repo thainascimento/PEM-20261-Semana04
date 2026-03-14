@@ -1,0 +1,156 @@
+#include <stdio.h>
+
+// Função main, sempre a princiapl do programa
+int main() {
+
+    // Cria a matriz 3x3 que representa o tabuleiro
+    char tabuleiro[3][3];
+
+    // char que representa posição vazia
+    char vazio = ' ';
+
+    // jogador atual começa com X
+    char jogador_atual = 'X';
+
+    // variável que controla se alguém venceu
+    int vencedor = 0;
+
+    // contador de jogadas para detectar empate
+    int jogadas = 0;
+
+    // variáveis que armazenam linha e coluna escolhidas
+    int linha, coluna;
+
+    // INICIALIZAÇÃO DO TABULEIRO - percorre todas as linhas
+    for(int i = 0; i < 3; i++) {
+
+        // percorre todas as colunas
+        for(int j = 0; j < 3; j++) {
+
+            // coloca espaço vazio em cada posição
+            tabuleiro[i][j] = vazio;
+        }
+    }
+
+    // Laço principal do jogo - continua enquanto ninguém venceu e ainda há espaço
+    while(vencedor == 0 && jogadas < 9) {
+
+        // MOSTRAR TABULEIRO
+        printf("\n");
+        printf("\n JOGO DA VELHA \n");
+        for(int i = 0; i < 3; i++) {
+            
+            printf(" %c | %c | %c ", tabuleiro[i][0], tabuleiro[i][1], tabuleiro[i][2]);
+
+            // imprime a divisão das linhas
+            if(i < 2)
+                printf("\n---I---I---\n");
+        }
+
+        printf("\n");
+
+
+        // pedir a jogada
+        printf("\nJogador %c, informe linha e coluna (0 a 2 - digite um numero>espaço<outro numero:)\n",jogador_atual );
+
+        // lê a posição digitada
+        scanf("%d %d", &linha, &coluna);
+
+        // valida se a posição digitada está dentro do tabuleiro
+        if(linha < 0 || linha > 2 || coluna < 0 || coluna > 2){
+            printf("Posicao invalida! Digite valores entre 0 e 2.\n");
+            continue;
+        }
+
+        // validar a jogada - esse if verifica se a posição é válida
+        if(tabuleiro[linha][coluna] != vazio) {
+
+            printf("Posicao ocupada! Tente novamente.\n");
+
+            // volta para o início do laço
+            continue;
+        }
+
+        // atualizar o tabuleiro
+        // coloca símbolo do jogador
+        tabuleiro[linha][coluna] = jogador_atual;
+
+        // aumenta contador de jogadas
+        jogadas++;
+
+        // percorrer as linhas
+        for(int i = 0; i < 3; i++) {
+
+            if(tabuleiro[i][0] == jogador_atual &&
+               tabuleiro[i][1] == jogador_atual &&
+               tabuleiro[i][2] == jogador_atual) {
+
+                vencedor = 1;
+            }
+        }
+        
+        // percorrer as colunas
+        for(int i = 0; i < 3; i++) {
+
+            if(tabuleiro[0][i] == jogador_atual &&
+               tabuleiro[1][i] == jogador_atual &&
+               tabuleiro[2][i] == jogador_atual) {
+
+                vencedor = 1;
+            }
+        }
+
+        // percorrer a diag principal
+        if(tabuleiro[0][0] == jogador_atual &&
+           tabuleiro[1][1] == jogador_atual &&
+           tabuleiro[2][2] == jogador_atual) {
+
+            vencedor = 1;
+        }
+
+        // percorrr a diag secundaria
+        if(tabuleiro[0][2] == jogador_atual &&
+           tabuleiro[1][1] == jogador_atual &&
+           tabuleiro[2][0] == jogador_atual) {
+
+            vencedor = 1;
+        }
+
+        // se alguém venceu, sai imediatamente do laço
+        if(vencedor == 1){
+            break;
+        }
+
+        // trocar jogador - basicamente: se jogador_atual for igual a "X", ele passará a ser "O". caso contrário, é "X" e assim vai
+        if(jogador_atual == 'X')
+            jogador_atual = 'O';
+        else
+            jogador_atual = 'X';
+    }
+
+    // exibir o tabuleiro final
+    printf("\n");
+
+    for(int i = 0; i < 3; i++) {
+
+        printf(" %c | %c | %c ", tabuleiro[i][0], tabuleiro[i][1], tabuleiro[i][2]);
+
+        if(i < 2)
+            printf("\n---I---I---\n");
+    }
+
+    printf("\n");
+
+    // rescultado final
+    if(vencedor == 1) {
+
+        printf("\nO jogador %c venceu!\n", jogador_atual);
+
+    } else {
+
+        printf("\nO jogo terminou em empate.\n");
+
+    }
+
+    return 0;
+}
